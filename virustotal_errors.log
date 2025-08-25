@@ -1,0 +1,16 @@
+ERROR 2025-08-04 12:57:02,505 views 10112 10944 IPInfo error: HTTPSConnectionPool(host='ipinfo.io', port=443): Read timed out.
+ERROR 2025-08-06 13:30:58,221 views 10648 13288 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-06 13:31:08,766 views 10648 8708 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-06 13:45:52,401 views 10648 14232 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-06 13:46:47,669 views 10648 8812 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-06 17:32:08,499 views 13712 2888 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-08 10:13:43,173 views 1828 9380 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-09 13:27:38,023 views 13548 8516 OTX URL scan error: HTTPSConnectionPool(host='otx.alienvault.com', port=443): Read timed out. (read timeout=30)
+ERROR 2025-08-09 13:34:29,427 views 14288 6448 OTX URL scan error: unhashable type: 'dict'
+ERROR 2025-08-09 13:35:15,579 views 14288 13440 OTX URL scan error: HTTPSConnectionPool(host='otx.alienvault.com', port=443): Read timed out. (read timeout=30)
+ERROR 2025-08-09 15:07:37,835 views 252 10392 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-12 11:25:12,669 views 10092 8012 Analysis error: unhashable type: 'dict'
+ERROR 2025-08-12 11:37:41,162 views 3864 2092 OTX IP scan error: HTTPSConnectionPool(host='otx.alienvault.com', port=443): Read timed out. (read timeout=30)
+ERROR 2025-08-12 11:38:25,327 views 3864 2092 OTX IP scan error: HTTPSConnectionPool(host='otx.alienvault.com', port=443): Read timed out. (read timeout=30)
+ERROR 2025-08-12 11:40:30,718 views 3864 2092 OTX IP scan error: HTTPSConnectionPool(host='otx.alienvault.com', port=443): Read timed out. (read timeout=30)
+ERROR 2025-08-12 11:52:05,451 views 3864 4680 Analysis error: unhashable type: 'dict'

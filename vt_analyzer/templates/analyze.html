@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybride Analysis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* Palette Rouge et Noir */
+            --primary-red: #dc2626;
+            --primary-red-dark: #991b1b;
+            --primary-red-light: #ef4444;
+            --secondary-red: #fca5a5;
+            --danger: #b91c1c;
+            --warning: #f59e0b;
+            --success: #16a34a;
+            --info: #0ea5e9;
+            
+            /* Nuances de noir et gris */
+            --black: #000000;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2d2d2d;
+            --light-gray: #404040;
+            --border-gray: #525252;
+            --text-gray: #a3a3a3;
+            --white: #ffffff;
+            --off-white: #f8fafc;
+            
+            /* Effets */
+            --gradient-primary: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+            --gradient-surface: linear-gradient(135deg, var(--medium-gray) 0%, var(--dark-gray) 100%);
+            --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --shadow-red: 0 10px 30px rgba(220, 38, 38, 0.3);
+            --shadow-intense: 0 20px 40px rgba(0, 0, 0, 0.7);
+            --border-radius: 16px;
+            --border-radius-sm: 8px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-dark);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Effet de grille cyberpunk en arrière-plan */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(220, 38, 38, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--gradient-surface);
+            border: 1px solid var(--border-gray);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-dark);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-intense);
+            border-color: var(--primary-red);
+        }
+
+        .card-content {
+            padding: 40px;
+        }
+
+        /* En-tête futuriste */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Formulaire stylisé */
+        .form-container {
+            background: var(--gradient-dark);
+            border: 2px solid var(--primary-red);
+            position: relative;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--white);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            background: var(--gradient-dark);
+            border: 2px solid var(--border-gray);
+            border-radius: var(--border-radius-sm);
+            color: var(--white);
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-red);
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(220, 38, 38, 0.4),
+                0 0 0 1px var(--primary-red);
+            outline: none;
+            background: var(--dark-gray);
+        }
+
+        .form-control:hover {
+            border-color: var(--primary-red-light);
+            background: var(--medium-gray);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-gray);
+            font-style: italic;
+        }
+
+        /* Styling pour les select */
+        select.form-control {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dc2626' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 50px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        select.form-control:focus {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+
+        select.form-control option {
+            background: var(--dark-gray);
+            color: var(--white);
+            padding: 10px;
+            border: none;
+        }
+
+        select.form-control option:hover,
+        select.form-control option:checked {
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        /* Styling spécial pour file input */
+        input[type="file"].form-control {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--gradient-dark);
+            border: 2px dashed var(--border-gray);
+            text-align: center;
+            padding: 25px 20px;
+            transition: var(--transition);
+        }
+
+        input[type="file"].form-control:hover {
+            border-color: var(--primary-red);
+            border-style: solid;
+            background: var(--medium-gray);
+        }
+
+        input[type="file"].form-control:focus {
+            border-color: var(--primary-red);
+            border-style: solid;
+            box-shadow: 
+                0 0 20px rgba(220, 38, 38, 0.4),
+                0 0 0 1px var(--primary-red);
+        }
+
+        /* Style pour le texte du file input */
+        input[type="file"].form-control::file-selector-button {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+
+        input[type="file"].form-control::file-selector-button:hover {
+            background: linear-gradient(135deg, var(--primary-red-light) 0%, var(--primary-red) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        /* Pour Firefox */
+        input[type="file"].form-control::-moz-file-upload-button {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+
+        input[type="file"].form-control::-moz-file-upload-button:hover {
+            background: linear-gradient(135deg, var(--primary-red-light) 0%, var(--primary-red) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        /* Wrapper personnalisé pour file input */
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper::before {
+            content: '📁 Glissez un fichier ici ou cliquez pour parcourir';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-gray);
+            font-style: italic;
+            pointer-events: none;
+            z-index: 1;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .file-input-wrapper input[type="file"]:not(:empty) + ::before {
+            display: none;
+        }
+
+        /* Animation pour les inputs */
+        .form-control {
+            position: relative;
+        }
+
+        .form-control::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .form-control:focus::before {
+            opacity: 0.1;
+        }
+
+        /* Bouton futuriste */
+        .btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            box-shadow: var(--shadow-red);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, var(--primary-red-light) 0%, var(--primary-red) 100%);
+        }
+
+        /* Grille de statistiques */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            padding: 30px;
+            border-radius: var(--border-radius);
+            background: var(--gradient-surface);
+            border: 1px solid var(--border-gray);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-dark);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-intense);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .stat-card .stat-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 1rem;
+            color: var(--text-gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Types de cartes avec couleurs */
+        .stat-card.malicious::before { background: var(--danger); }
+        .stat-card.malicious .stat-number { color: var(--danger); }
+        .stat-card.malicious:hover { border-color: var(--danger); }
+
+        .stat-card.suspicious::before { background: var(--warning); }
+        .stat-card.suspicious .stat-number { color: var(--warning); }
+        .stat-card.suspicious:hover { border-color: var(--warning); }
+
+        .stat-card.clean::before { background: var(--success); }
+        .stat-card.clean .stat-number { color: var(--success); }
+        .stat-card.clean:hover { border-color: var(--success); }
+
+        .stat-card.neutral::before { background: var(--info); }
+        .stat-card.neutral .stat-number { color: var(--info); }
+        .stat-card.neutral:hover { border-color: var(--info); }
+
+        /* Alertes */
+        .alert {
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            border-left: 4px solid;
+            font-weight: 500;
+        }
+
+        .alert-danger {
+            background: rgba(185, 28, 28, 0.1);
+            border-left-color: var(--danger);
+            color: #fecaca;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left-color: var(--warning);
+            color: #fde68a;
+        }
+
+        .alert-success {
+            background: rgba(22, 163, 74, 0.1);
+            border-left-color: var(--success);
+            color: #bbf7d0;
+        }
+
+        /* Sections de résultats */
+        .result-section {
+            margin-bottom: 40px;
+        }
+
+        .result-section h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-red);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tableaux */
+        .detection-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: var(--dark-gray);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+        }
+        
+        .detection-table th, 
+        .detection-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        
+        .detection-table th {
+            background: var(--gradient-primary);
+            color: var(--white);
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detection-table td {
+            color: var(--text-gray);
+        }
+
+        .detection-table tr:hover {
+            background: var(--medium-gray);
+        }
+
+        /* Boîtes d'informations */
+        .info-box {
+            background: var(--medium-gray);
+            border: 1px solid var(--border-gray);
+            padding: 20px;
+            border-radius: var(--border-radius-sm);
+            margin-top: 20px;
+        }
+
+        .info-box h4 {
+            color: var(--primary-red);
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .info-box p {
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .info-box strong {
+            color: var(--white);
+        }
+
+        /* Tags et badges */
+        .tag {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .malware-tag {
+            background: linear-gradient(135deg, var(--danger), #7f1d1d);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .card-content {
+                padding: 25px;
+            }
+
+            .stat-card .stat-number {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-content {
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(220, 38, 38, 0.6); }
+        }
+
+        .header h1 {
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-red);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-red-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+     
+        <div class="header">
+            <h1>🔴 Hybride Analysis</h1>
+            <p class="subtitle">Analyse de sécurité avec VirusTotal et AlienVault OTX</p>
+        </div>
+
+       
+        <div class="card form-container">
+            <div class="card-content">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.input_value.id_for_label }}">URL, Adresse IP ou Hash :</label>
+                        {{ form.input_value }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.file.id_for_label }}">Ou téléverser un fichier :</label>
+                        {{ form.file }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.engine_choice.id_for_label }}">Moteur d'analyse :</label>
+                        {{ form.engine_choice }}
+                    </div>
+                    <button type="submit" class="btn">Lancer l'analyse</button>
+                </form>
+            </div>
+        </div>
+
+       
+        {% if error_message %}
+            <div class="card">
+                <div class="card-content">
+                    <div class="alert alert-danger">
+                        <h3>⛔ Erreur</h3>
+                        <p>{{ error_message }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+      
+        {% if result %}
+            <div class="card">
+                <div class="card-content">
+                    <h2 style="margin-bottom: 30px; font-family: 'Orbitron', monospace; color: var(--primary-red);">🔍 Résultats de l'analyse</h2>
+                    
+                    <!-- Informations sur l'entrée -->
+                    <div class="result-section">
+                        <h3>📋 Informations sur l'entrée</h3>
+                        <div class="info-box">
+                            <p><strong>Type :</strong> 
+                                {% if result.type == 'url' %}URL
+                                {% elif result.type == 'ip' %}Adresse IP
+                                {% elif result.type == 'hash' %}Hash de fichier
+                                {% elif result.type == 'file' %}Fichier
+                                {% else %}Inconnu{% endif %}
+                            </p>
+                            {% if result.input %}
+                                <p><strong>Valeur analysée :</strong> {{ result.input }}</p>
+                            {% endif %}
+                            {% if result.file_name %}
+                                <p><strong>Fichier analysé :</strong> {{ result.file_name }}</p>
+                            {% endif %}
+                            <p><strong>Moteur utilisé :</strong> 
+                                {% if result.engine == 'vt' %}VirusTotal
+                                {% elif result.engine == 'otx' %}AlienVault OTX
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Informations IP -->
+                    {% if result.type == 'ip' and result.ipinfo %}
+                        <div class="result-section">
+                            <h3>🌍 Informations géographiques</h3>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">🌐</div>
+                                    <div class="stat-number">{{ result.ipinfo.ip }}</div>
+                                    <div class="stat-label">Adresse IP</div>
+                                </div>
+                                {% if result.ipinfo.country %}
+                                <div class="stat-card">
+                                    <div class="stat-icon">🗺️</div>
+                                    <div class="stat-number">{{ result.ipinfo.country }}</div>
+                                    <div class="stat-label">Pays</div>
+                                </div>
+                                {% endif %}
+                                {% if result.ipinfo.city %}
+                                <div class="stat-card">
+                                    <div class="stat-icon">🏙️</div>
+                                    <div class="stat-number">{{ result.ipinfo.city }}</div>
+                                    <div class="stat-label">Ville</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="info-box">
+                                {% if result.ipinfo.org %}
+                                    <p><strong>🏢 Organisation :</strong> {{ result.ipinfo.org }}</p>
+                                {% endif %}
+                                {% if result.ipinfo.loc %}
+                                    <p><strong>📍 Localisation :</strong> {{ result.ipinfo.loc }}</p>
+                                {% endif %}
+                                {% if result.ipinfo.timezone %}
+                                    <p><strong>⏱️ Fuseau horaire :</strong> {{ result.ipinfo.timezone }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Résultats VirusTotal -->
+                    {% if result.engine == 'vt' and result.vt %}
+                        <div class="result-section">
+                            <h3>🔍 Résultats VirusTotal</h3>
+                            
+                            {% if 'error' in result.vt %}
+                                <div class="alert alert-danger">
+                                    {{ result.vt.error }}
+                                </div>
+                            {% else %}
+                                <!-- Statistiques -->
+                                <div class="stats-grid">
+                                    <div class="stat-card malicious">
+                                        <div class="stat-icon">🛑</div>
+                                        <div class="stat-number">
+                                            {{ result.vt.data.attributes.last_analysis_stats.malicious|default:0 }}
+                                        </div>
+                                        <div class="stat-label">Malveillant</div>
+                                    </div>
+                                    <div class="stat-card suspicious">
+                                        <div class="stat-icon">⚠️</div>
+                                        <div class="stat-number">
+                                            {{ result.vt.data.attributes.last_analysis_stats.suspicious|default:0 }}
+                                        </div>
+                                        <div class="stat-label">Suspect</div>
+                                    </div>
+                                    <div class="stat-card clean">
+                                        <div class="stat-icon">✅</div>
+                                        <div class="stat-number">
+                                            {{ result.vt.data.attributes.last_analysis_stats.harmless|default:0 }}
+                                        </div>
+                                        <div class="stat-label">Inoffensif</div>
+                                    </div>
+                                    <div class="stat-card neutral">
+                                        <div class="stat-icon">🔍</div>
+                                        <div class="stat-number">
+                                            {{ result.vt.data.attributes.last_analysis_stats.undetected|default:0 }}
+                                        </div>
+                                        <div class="stat-label">Non détecté</div>
+                                    </div>
+                                </div>
+
+                                <!-- Détails spécifiques -->
+                                {% if result.type == 'file' %}
+                                    <div class="info-box">
+                                        <h4>📄 Métadonnées du fichier</h4>
+                                        <p><strong>Type :</strong> {{ result.vt.data.attributes.type_description|default:"Inconnu" }}</p>
+                                        <p><strong>Taille :</strong> {{ result.vt.data.attributes.size|filesizeformat }}</p>
+                                        <p><strong>Noms :</strong> 
+                                            {% for name in result.vt.data.attributes.names|slice:":3" %}
+                                                {{ name }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                
+                                {% elif result.type == 'url' %}
+                                    <div class="info-box">
+                                        <h4>🌐 Détails de l'URL</h4>
+                                        <p><strong>URL analysée :</strong> {{ result.vt.data.id }}</p>
+                                        {% if result.vt.data.attributes.categories %}
+                                            <p><strong>Catégories :</strong>
+                                                {% for vendor, category in result.vt.data.attributes.categories.items %}
+                                                    <span class="tag">{{ category }}</span>
+                                                {% endfor %}
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                
+                                {% elif result.type == 'ip' %}
+                                    <div class="info-box">
+                                        <h4>📡 Détails de l'IP</h4>
+                                        <p><strong>Dernières résolutions DNS :</strong></p>
+                                        <ul>
+                                            {% for resolution in result.vt.data.attributes.last_dns_records|slice:":5" %}
+                                                <li>{{ resolution.value }} ({{ resolution.type }}) - {{ resolution.date|date:"Y-m-d" }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+
+                                <!-- Détections par moteur -->
+                                <div style="margin-top: 30px;">
+                                    <h4 style="color: var(--primary-red); font-family: 'Orbitron', monospace; margin-bottom: 20px;">🔧 Détections par moteur</h4>
+                                    <div style="max-height: 400px; overflow-y: auto;">
+                                        <table class="detection-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Moteur</th>
+                                                    <th>Résultat</th>
+                                                    <th>Catégorie</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for engine, details in result.vt.data.attributes.last_analysis_results.items %}
+                                                    {% if details.category == 'malicious' or details.category == 'suspicious' %}
+                                                        <tr>
+                                                            <td>{{ engine }}</td>
+                                                            <td>{{ details.result|default:"N/A" }}</td>
+                                                            <td style="color: {% if details.category == 'malicious' %}var(--danger){% else %}var(--warning){% endif %}; font-weight: bold;">
+                                                                {{ details.category }}
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Résultats OTX -->
+                    {% if result.engine == 'otx' and result.otx %}
+                        <div class="result-section">
+                            <h3>🛡️ Résultats OTX (AlienVault)</h3>
+
+                            <!-- Statistiques basées sur les pulses trouvés -->
+                            <div class="stats-grid">
+                                <div class="stat-card neutral">
+                                    <div class="stat-icon">📌</div>
+                                    <div class="stat-number">{{ result.otx.pulse_count|default:"0" }}</div>
+                                    <div class="stat-label">Pulses trouvés</div>
+                                </div>
+                                {% if result.otx.reputation %}
+                                <div class="stat-card {% if result.otx.reputation > 0 %}malicious{% else %}clean{% endif %}">
+                                    <div class="stat-icon">⭐</div>
+                                    <div class="stat-number">{{ result.otx.reputation }}</div>
+                                    <div class="stat-label">Réputation</div>
+                                </div>
+                                {% endif %}
+                                {% if result.otx.malware_families %}
+                                <div class="stat-card malicious">
+                                    <div class="stat-icon">🦠</div>
+                                    <div class="stat-number">{{ result.otx.malware_families|length }}</div>
+                                    <div class="stat-label">Familles malware</div>
+                                </div>
+                                {% endif %}
+                                {% if result.type == 'ip' and result.otx.summary %}
+                                <div class="stat-card {% if 'Aucun' in result.otx.summary %}clean{% else %}suspicious{% endif %}">
+                                    <div class="stat-icon">🔍</div>
+                                    <div class="stat-number">{{ result.otx.pulse_count|default:"0" }}</div>
+                                    <div class="stat-label">Indicateurs trouvés</div>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Résumé pour les IPs -->
+                            {% if result.type == 'ip' and result.otx.summary %}
+                                <div class="alert {% if 'Aucun' in result.otx.summary %}alert-success{% else %}alert-warning{% endif %}">
+                                    <strong>{{ result.otx.summary }}</strong>
+                                </div>
+                            {% endif %}
+
+                            <!-- Détails Pulses -->
+                            {% if result.otx.pulses %}
+                            <div style="margin-top: 30px;">
+                                <h4 style="color: var(--primary-red); font-family: 'Orbitron', monospace; margin-bottom: 20px;">📌 Pulses détectés</h4>
+                                {% for pulse in result.otx.pulses %}
+                                <div style="margin-bottom: 20px; padding: 20px; background: var(--medium-gray); border-radius: var(--border-radius-sm); border-left: 4px solid var(--warning); border: 1px solid var(--border-gray);">
+                                    <strong style="color: var(--primary-red);">{{ pulse.name }}</strong>
+                                    {% if pulse.description %}
+                                    <p style="margin-top: 10px; color: var(--text-gray);">{{ pulse.description|truncatechars:150 }}</p>
+                                    {% endif %}
+                                    {% if pulse.tags %}
+                                    <div style="margin-top: 15px;">
+                                        {% for tag in pulse.tags|slice:":5" %}
+                                        <span class="tag">{{ tag }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    {% if pulse.created %}
+                                    <p style="font-size: 0.9em; color: var(--text-gray); margin-top: 10px;">
+                                        Créé le : {{ pulse.created|date:"d/m/Y" }}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <!-- Noms des pulses pour les IPs -->
+                            {% if result.type == 'ip' and result.otx.pulse_names %}
+                            <div style="margin-top: 30px;">
+                                <h4 style="color: var(--primary-red); font-family: 'Orbitron', monospace; margin-bottom: 20px;">📋 Noms des pulses</h4>
+                                <ul style="margin-left: 20px; color: var(--text-gray);">
+                                    {% for pulse_name in result.otx.pulse_names %}
+                                    <li style="margin-bottom: 8px; color: var(--white);">{{ pulse_name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            <!-- Familles de malware -->
+                            {% if result.otx.malware_families %}
+                            <div style="margin-top: 30px;">
+                                <h4 style="color: var(--primary-red); font-family: 'Orbitron', monospace; margin-bottom: 20px;">🦠 Familles de Malware détectées</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                    {% for malware in result.otx.malware_families %}
+                                    <span class="malware-tag">{{ malware }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Informations géographiques pour les IPs -->
+                            {% if result.type == 'ip' and result.otx.geo %}
+                            <div style="margin-top: 30px;">
+                                <h4 style="color: var(--primary-red); font-family: 'Orbitron', monospace; margin-bottom: 20px;">🌍 Localisation géographique (OTX)</h4>
+                                <div class="info-box">
+                                    {% if result.otx.geo.country_name %}
+                                    <p><strong>Pays :</strong> {{ result.otx.geo.country_name }}</p>
+                                    {% endif %}
+                                    {% if result.otx.geo.city %}
+                                    <p><strong>Ville :</strong> {{ result.otx.geo.city }}</p>
+                                    {% endif %}
+                                    {% if result.otx.geo.asn %}
+                                    <p><strong>ASN :</strong> {{ result.otx.geo.asn }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="url"], input[type="search"], input');
+            inputs.forEach(input => {
+                // Éviter les inputs de type file et hidden
+                if (input.type === 'file' || input.type === 'hidden') return;
+                
+                
+                input.style.cssText = `
+                    width: 100% !important;
+                    padding: 18px 20px !important;
+                    font-size: 1.1rem !important;
+                    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%) !important;
+                    border: 2px solid #525252 !important;
+                    border-radius: 8px !important;
+                    color: #ffffff !important;
+                    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+                    font-family: 'Inter', sans-serif !important;
+                    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+                `;
+                
+                if (!input.placeholder) {
+                    input.placeholder = 'Entrez une URL, IP ou hash...';
+                }
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    input::placeholder {
+                        color: #a3a3a3 !important;
+                        font-style: italic !important;
+                    }
+                    input::-webkit-input-placeholder {
+                        color: #a3a3a3 !important;
+                        font-style: italic !important;
+                    }
+                    input::-moz-placeholder {
+                        color: #a3a3a3 !important;
+                        font-style: italic !important;
+                        opacity: 1 !important;
+                    }
+                    input:-ms-input-placeholder {
+                        color: #a3a3a3 !important;
+                        font-style: italic !important;
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // Effet de focus
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#dc2626 !important';
+                    this.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(220, 38, 38, 0.4), 0 0 0 1px #dc2626 !important';
+                    this.style.background = '#2d2d2d !important';
+                });
+                
+                // Effet de typing
+                input.addEventListener('input', function() {
+                    this.style.borderColor = '#dc2626 !important';
+                    this.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 15px rgba(220, 38, 38, 0.3) !important';
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.style.borderColor = '#525252 !important';
+                        this.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.3) !important';
+                        this.style.background = 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%) !important';
+                    }
+                });
+                
+                // Effet hover
+                input.addEventListener('mouseenter', function() {
+                    if (document.activeElement !== this) {
+                        this.style.borderColor = '#ef4444 !important';
+                        this.style.background = '#2d2d2d !important';
+                    }
+                });
+                
+                input.addEventListener('mouseleave', function() {
+                    if (document.activeElement !== this && !this.value) {
+                        this.style.borderColor = '#525252 !important';
+                        this.style.background = 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%) !important';
+                    }
+                });
+            });
+
+            // Personnalisation du file input
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+            fileInputs.forEach(fileInput => {
+                // Créer un wrapper personnalisé
+                const wrapper = document.createElement('div');
+                wrapper.className = 'custom-file-input';
+                wrapper.style.cssText = `
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    padding: 18px 20px;
+                    background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+                    border: 2px solid var(--border-gray);
+                    border-radius: var(--border-radius-sm);
+                    color: var(--white);
+                    cursor: pointer;
+                    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+                `;
+                
+                const icon = document.createElement('span');
+                icon.innerHTML = '📁';
+                icon.style.cssText = `
+                    font-size: 1.5rem;
+                    margin-right: 15px;
+                    filter: grayscale(1);
+                    transition: all 0.3s ease;
+                `;
+                
+                const text = document.createElement('span');
+                text.textContent = 'Choisir un fichier...';
+                text.style.cssText = `
+                    font-family: 'Inter', sans-serif;
+                    color: var(--text-gray);
+                    font-style: italic;
+                `;
+                
+                const button = document.createElement('span');
+                button.textContent = 'PARCOURIR';
+                button.style.cssText = `
+                    position: absolute;
+                    right: 15px;
+                    background: var(--gradient-primary);
+                    color: var(--white);
+                    padding: 8px 16px;
+                    border-radius: 6px;
+                    font-family: 'Orbitron', monospace;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    transition: all 0.3s ease;
+                `;
+                
+                wrapper.appendChild(icon);
+                wrapper.appendChild(text);
+                wrapper.appendChild(button);
+                
+                // Cacher le input original
+                fileInput.style.display = 'none';
+                fileInput.parentNode.insertBefore(wrapper, fileInput);
+                
+                // Événements
+                wrapper.addEventListener('click', () => fileInput.click());
+                
+                wrapper.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--primary-red)';
+                    this.style.background = 'var(--medium-gray)';
+                    icon.style.filter = 'grayscale(0)';
+                    button.style.background = 'linear-gradient(135deg, var(--primary-red-light) 0%, var(--primary-red) 100%)';
+                    button.style.transform = 'translateY(-2px)';
+                    button.style.boxShadow = '0 5px 15px rgba(220, 38, 38, 0.3)';
+                });
+                
+                wrapper.addEventListener('mouseleave', function() {
+                    this.style.borderColor = 'var(--border-gray)';
+                    this.style.background = 'linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%)';
+                    icon.style.filter = 'grayscale(1)';
+                    button.style.background = 'var(--gradient-primary)';
+                    button.style.transform = 'translateY(0)';
+                    button.style.boxShadow = 'none';
+                });
+                
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        text.textContent = this.files[0].name;
+                        text.style.color = 'var(--primary-red)';
+                        text.style.fontStyle = 'normal';
+                        text.style.fontWeight = '600';
+                        icon.style.filter = 'grayscale(0)';
+                        wrapper.style.borderColor = 'var(--primary-red)';
+                        wrapper.style.boxShadow = '0 0 15px rgba(220, 38, 38, 0.3)';
+                    } else {
+                        text.textContent = 'Choisir un fichier...';
+                        text.style.color = 'var(--text-gray)';
+                        text.style.fontStyle = 'italic';
+                        text.style.fontWeight = 'normal';
+                    }
+                });
+            });
+
+            // Personnalisation du select
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                // Créer un select personnalisé
+                const customSelect = document.createElement('div');
+                customSelect.className = 'custom-select';
+                customSelect.style.cssText = `
+                    position: relative;
+                    width: 100%;
+                    background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+                    border: 2px solid var(--border-gray);
+                    border-radius: var(--border-radius-sm);
+                    cursor: pointer;
+                    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+                `;
+                
+                const selected = document.createElement('div');
+                selected.className = 'select-selected';
+                selected.style.cssText = `
+                    padding: 18px 20px;
+                    padding-right: 50px;
+                    color: var(--white);
+                    font-family: 'Inter', sans-serif;
+                    font-size: 1.1rem;
+                    position: relative;
+                `;
+                
+                const arrow = document.createElement('div');
+                arrow.innerHTML = '▼';
+                arrow.style.cssText = `
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: var(--primary-red);
+                    font-size: 0.8rem;
+                    transition: all 0.3s ease;
+                `;
+                
+                const optionsList = document.createElement('div');
+                optionsList.className = 'select-options';
+                optionsList.style.cssText = `
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background: var(--dark-gray);
+                    border: 2px solid var(--primary-red);
+                    border-top: none;
+                    border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
+                    z-index: 1000;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    display: none;
+                    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+                `;
+                
+                // Remplir les options
+                selected.textContent = select.options[select.selectedIndex].textContent;
+                
+                Array.from(select.options).forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.textContent = option.textContent;
+                    optionDiv.setAttribute('data-value', option.value);
+                    optionDiv.style.cssText = `
+                        padding: 12px 20px;
+                        color: var(--white);
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        border-bottom: 1px solid var(--border-gray);
+                        font-family: 'Inter', sans-serif;
+                    `;
+                    
+                    if (index === select.selectedIndex) {
+                        optionDiv.style.background = 'var(--primary-red)';
+                        optionDiv.style.fontWeight = '600';
+                    }
+                    
+                    optionDiv.addEventListener('mouseenter', function() {
+                        this.style.background = 'var(--primary-red)';
+                        this.style.paddingLeft = '25px';
+                    });
+                    
+                    optionDiv.addEventListener('mouseleave', function() {
+                        if (this.getAttribute('data-value') !== select.value) {
+                            this.style.background = 'transparent';
+                            this.style.paddingLeft = '20px';
+                        }
+                    });
+                    
+                    optionDiv.addEventListener('click', function() {
+                        select.value = this.getAttribute('data-value');
+                        selected.textContent = this.textContent;
+                        optionsList.style.display = 'none';
+                        arrow.style.transform = 'translateY(-50%) rotate(0deg)';
+                        
+                        // Mettre à jour les styles des options
+                        Array.from(optionsList.children).forEach(opt => {
+                            opt.style.background = 'transparent';
+                            opt.style.fontWeight = 'normal';
+                            opt.style.paddingLeft = '20px';
+                        });
+                        this.style.background = 'var(--primary-red)';
+                        this.style.fontWeight = '600';
+                        
+                        // Déclencher l'événement change
+                        select.dispatchEvent(new Event('change'));
+                    });
+                    
+                    optionsList.appendChild(optionDiv);
+                });
+                
+                selected.appendChild(arrow);
+                customSelect.appendChild(selected);
+                customSelect.appendChild(optionsList);
+                
+                // Événements
+                customSelect.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = optionsList.style.display === 'block';
+                    
+                    // Fermer tous les autres selects
+                    document.querySelectorAll('.select-options').forEach(opt => {
+                        opt.style.display = 'none';
+                    });
+                    document.querySelectorAll('.custom-select .select-selected div').forEach(arr => {
+                        arr.style.transform = 'translateY(-50%) rotate(0deg)';
+                    });
+                    
+                    if (!isOpen) {
+                        optionsList.style.display = 'block';
+                        arrow.style.transform = 'translateY(-50%) rotate(180deg)';
+                        customSelect.style.borderColor = 'var(--primary-red)';
+                        customSelect.style.boxShadow = '0 0 15px rgba(220, 38, 38, 0.3)';
+                    } else {
+                        customSelect.style.borderColor = 'var(--border-gray)';
+                        customSelect.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.3)';
+                    }
+                });
+                
+                customSelect.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--primary-red-light)';
+                    this.style.background = 'var(--medium-gray)';
+                });
+                
+                customSelect.addEventListener('mouseleave', function() {
+                    if (optionsList.style.display !== 'block') {
+                        this.style.borderColor = 'var(--border-gray)';
+                        this.style.background = 'linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%)';
+                    }
+                });
+                
+                // Fermer en cliquant ailleurs
+                document.addEventListener('click', function() {
+                    optionsList.style.display = 'none';
+                    arrow.style.transform = 'translateY(-50%) rotate(0deg)';
+                    customSelect.style.borderColor = 'var(--border-gray)';
+                    customSelect.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.3)';
+                });
+                
+                // Cacher le select original et insérer le personnalisé
+                select.style.display = 'none';
+                select.parentNode.insertBefore(customSelect, select);
+            });
+
+            // Animation des cartes au chargement
+            const cards = document.querySelectorAll('.stat-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 150 * index);
+            });
+
+            // Effet de survol sur les cartes principales
+            const mainCards = document.querySelectorAll('.card');
+            mainCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Animation du bouton
+            const btn = document.querySelector('.btn');
+            if (btn) {
+                btn.addEventListener('click', function(e) {
+                    // Effet de ripple
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            }
+
+            // Animation de la table de détection
+            const table = document.querySelector('.detection-table');
+            if (table) {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach((row, index) => {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        row.style.transition = 'all 0.4s ease';
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateX(0)';
+                    }, 50 * index);
+                });
+            }
+        });
+
+        // Style CSS pour l'effet ripple
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
